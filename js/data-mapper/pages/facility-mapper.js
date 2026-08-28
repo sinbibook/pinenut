@@ -294,7 +294,7 @@
 
     // offer swiper 초기화 (index atc03 와 동일 설정)
     if (window.offerSwiper) window.offerSwiper.destroy(false, true);
-    window.offerSwiper = new Swiper('.offer_slide', {
+    window.offerSwiper = createSwiper('.offer_slide', {
       loop: true,
       speed: 1000,
       slidesPerView: 2,

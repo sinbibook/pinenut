@@ -7,7 +7,7 @@ function initReservationHero() {
 
   if (slideEl.swiper) slideEl.swiper.destroy(true, true);
 
-  new Swiper('#main_banner .main_slide', {
+  createSwiper('#main_banner .main_slide', {
     effect: 'fade',
     fadeEffect: { crossFade: true },
     slideActiveClass: 'on',

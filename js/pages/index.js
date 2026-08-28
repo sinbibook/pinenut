@@ -18,7 +18,7 @@ function initIndexHero() {
   if (slideEl.swiper) slideEl.swiper.destroy(true, true);
   if (pagerEl && pagerEl.swiper) pagerEl.swiper.destroy(true, true);
 
-  new Swiper("#main_banner .main_slide", {
+  createSwiper("#main_banner .main_slide", {
     effect: 'fade',
     fadeEffect: { crossFade: true },
     slideActiveClass: 'on',
@@ -44,7 +44,7 @@ function initIndexHero() {
     }
   });
 
-  new Swiper("#main_banner .controls .pager", {
+  createSwiper("#main_banner .controls .pager", {
     effect: 'fade',
     fadeEffect: { crossFade: true },
     slideActiveClass: 'on',
@@ -63,7 +63,7 @@ window.addEventListener('heroSlidesReady', initIndexHero);
 // 히어로는 room.js와 동일하게 heroSlidesReady 이벤트로만 init (여기서 중복 호출 금지 → race 방지)
 window.initIndexSwipers = function () {
   // About Swiper
-  window.atc01Swiper = new Swiper(".atc01_slide", {
+  window.atc01Swiper = createSwiper(".atc01_slide", {
     loop: true,
     speed: 1000,
     slidesPerView: 1.3,
@@ -99,7 +99,7 @@ window.initIndexSwipers = function () {
   });
 
   // Room Swiper
-  window.roomSwiper = new Swiper(".room_slider", {
+  window.roomSwiper = createSwiper(".room_slider", {
     loop: true,
     effect: 'fade',
     speed: 2000,
@@ -116,7 +116,7 @@ window.initIndexSwipers = function () {
   });
 
   // Special Swiper
-  new Swiper(".offer_slide", {
+  createSwiper(".offer_slide", {
     loop: true,
     speed: 1000,
     slidesPerView: 2,
@@ -148,8 +148,13 @@ window.initIndexSwipers = function () {
 };
 
 // DOMContentLoaded에서 swiper 초기화 (index-mapper가 없을 경우 대비)
+// 매퍼가 이미 초기화를 마쳤다면 건너뛴다.
+// (매퍼 fetch가 100ms 안에 끝나느냐에 따라 순서가 뒤바뀌는데, 그대로 재초기화하면
+//  슬라이드가 처음으로 되감기고 autoplay 타이머가 리셋된다)
 $(document).ready(function () {
   setTimeout(function () {
+    var atc01 = document.querySelector('.atc01_slide');
+    if (atc01 && atc01.swiper && !atc01.swiper.destroyed) return;
     if (window.initIndexSwipers) {
       window.initIndexSwipers();
     }

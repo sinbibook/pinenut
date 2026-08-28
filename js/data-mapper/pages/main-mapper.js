@@ -207,7 +207,7 @@
       window.atc01Swiper.destroy(false, true);
     }
 
-    window.atc01Swiper = new Swiper('.atc01_slide', {
+    window.atc01Swiper = createSwiper('.atc01_slide', {
       loop: true,
       speed: 1000,
       slidesPerView: 1.3,
@@ -219,8 +219,8 @@
         disableOnInteraction: false,
       },
       navigation: {
-        nextEl: '#atc01 .arr.prev',
-        prevEl: '#atc01 .arr.next',
+        nextEl: '#atc01 .arr.next',
+        prevEl: '#atc01 .arr.prev',
       },
       pagination: {
         el: '#atc01 .pager',

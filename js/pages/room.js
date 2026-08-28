@@ -19,7 +19,7 @@ function initRoomHero() {
     if (slideEl.swiper) slideEl.swiper.destroy(true, true);
     if (pagerEl && pagerEl.swiper) pagerEl.swiper.destroy(true, true);
 
-    new Swiper("#main_banner .main_slide", {
+    createSwiper("#main_banner .main_slide", {
         effect: 'fade',
         fadeEffect: { crossFade: true },
         slideActiveClass: 'on',
@@ -44,7 +44,7 @@ function initRoomHero() {
         }
     });
 
-    new Swiper("#main_banner .controls .pager", {
+    createSwiper("#main_banner .controls .pager", {
         effect: 'fade',
         fadeEffect: { crossFade: true },
         slideActiveClass: 'on',
@@ -70,7 +70,7 @@ window.addEventListener('roomSliderReady', function () {
         rvSliderEl.swiper.destroy(true, true);
     }
 
-    new Swiper(rvSliderEl, {
+    createSwiper(rvSliderEl, {
         loop: true,
         speed: 1000,
         slidesPerView: 'auto',
