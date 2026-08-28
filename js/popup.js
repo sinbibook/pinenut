@@ -19,6 +19,7 @@ class PopupManager {
         this.isInitialized = false;
         this._baseMapper = window.BaseMapper ? new BaseMapper() : null;
         this._escHandler = null;
+        this._resizeHandler = null;
     }
 
     /**
@@ -202,6 +203,48 @@ class PopupManager {
         });
 
         this.bindEvents();
+        this.fitBoxes();
+    }
+
+    /**
+     * 이미지 원본 비율(naturalWidth/Height)로 박스 폭을 계산해 적용
+     * → 잘림 없음 + 좌우 빈 여백 없음 (세로로 긴 이미지는 화면 높이에 맞춰 축소)
+     */
+    fitBoxes() {
+        const imgs = this.container.querySelectorAll('.popup-image');
+        imgs.forEach(img => {
+            if (img.complete && img.naturalWidth) {
+                this.fitBox(img);
+            } else {
+                img.addEventListener('load', () => this.fitBox(img), { once: true });
+            }
+        });
+
+        if (!this._resizeHandler) {
+            this._resizeHandler = () => this.fitBoxes();
+            window.addEventListener('resize', this._resizeHandler);
+        }
+    }
+
+    /**
+     * 박스 1개 폭 계산
+     */
+    fitBox(img) {
+        const box = img.closest('.popup-content');
+        if (!box || !img.naturalWidth || !img.naturalHeight) return;
+
+        const CHROME_W = 22;  // 좌우 padding(10*2) + border(1*2)
+        const CHROME_H = 80;  // 상하 padding + 푸터(35) + 푸터 상단 여백(10) + border + 여유
+
+        const maxW = Math.min(window.innerWidth * 0.9, PopupManager.MAX_BOX_WIDTH) - CHROME_W;
+        const maxH = window.innerHeight * 0.9 - CHROME_H;
+        const ratio = img.naturalWidth / img.naturalHeight;
+
+        let w = Math.min(img.naturalWidth, maxW);
+        if (w / ratio > maxH) w = maxH * ratio;
+        w = Math.max(w, 1);
+
+        box.style.width = Math.round(w + CHROME_W) + 'px';
     }
 
     /**
@@ -235,8 +278,10 @@ class PopupManager {
      */
     renderBox(box) {
         const hasText = (box.title && box.title.trim()) || (box.description && box.description.trim());
+        // 원본 비율 그대로 노출(잘림 없음) → background cover 대신 <img> 사용
         const imageInner = `
-            <div class="popup-image" style="background-image: url('${this.escapeHtml(box.url)}')">
+            <div class="popup-image-wrap">
+                <img class="popup-image" src="${this.escapeHtml(box.url)}" alt="${this.escapeHtml(box.title || '팝업 이미지')}">
                 ${hasText ? `
                     <div class="popup-text-content">
                         ${box.title && box.title.trim() ? `<h3 class="popup-title">${this.escapeHtml(box.title)}</h3>` : ''}
@@ -320,6 +365,10 @@ class PopupManager {
             document.removeEventListener('keydown', this._escHandler);
             this._escHandler = null;
         }
+        if (this._resizeHandler) {
+            window.removeEventListener('resize', this._resizeHandler);
+            this._resizeHandler = null;
+        }
     }
 
     /**
@@ -360,6 +409,9 @@ class PopupManager {
         this.processPopups(popupData);
     }
 }
+
+// 팝업 박스 최대 가로폭 (styles/popup.css .popup-content max-width 와 동일하게 유지)
+PopupManager.MAX_BOX_WIDTH = 700;
 
 // 전역 인스턴스 생성
 window.PopupManager = PopupManager;

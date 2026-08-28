@@ -19,7 +19,7 @@ function initFacilityHero() {
   if (slideEl.swiper) slideEl.swiper.destroy(true, true);
   if (pagerEl && pagerEl.swiper) pagerEl.swiper.destroy(true, true);
 
-  new Swiper("#main_banner .main_slide", {
+  createSwiper("#main_banner .main_slide", {
     effect: 'fade',
     fadeEffect: { crossFade: true },
     slideActiveClass: 'on',
@@ -44,7 +44,7 @@ function initFacilityHero() {
     }
   });
 
-  new Swiper("#main_banner .controls .pager", {
+  createSwiper("#main_banner .controls .pager", {
     effect: 'fade',
     fadeEffect: { crossFade: true },
     slideActiveClass: 'on',

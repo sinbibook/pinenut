@@ -1,10 +1,32 @@
 (function () {
   'use strict';
 
+  // Swiper 중복 생성 방지 헬퍼 - 즉시 노출 (mapper/pages 양쪽에서 사용)
+  // Swiper 6 은 el.swiper 에 기존 인스턴스가 있어도 재사용하지 않고 새로 만든다.
+  // 매퍼(fetch 완료 후)와 pages/*.js(ready+100ms)가 같은 엘리먼트를 각각 초기화하면
+  // 이전 인스턴스의 autoplay 타이머와 네비게이션 핸들러가 그대로 남아
+  // 두 인스턴스가 같은 wrapper transform 을 서로 덮어써 슬라이드가 버벅인다.
+  // → 생성 직전에 해당 엘리먼트에 물려있는 인스턴스를 반드시 정리한다.
+  window.createSwiper = function (target, options) {
+    var els = typeof target === 'string'
+      ? Array.prototype.slice.call(document.querySelectorAll(target))
+      : (target ? [target] : []);
+    if (!els.length) return null;
+
+    var created = els.map(function (el) {
+      if (el.swiper && !el.swiper.destroyed) {
+        el.swiper.destroy(true, true);
+      }
+      return new Swiper(el, options);
+    });
+
+    return created.length === 1 ? created[0] : created;
+  };
+
   // Swiper 초기화 헬퍼 - 즉시 노출 (pages/[page].js의 ready()에서 사용)
   window.initSwiper = function (container, options) {
     if (container && container.length) {
-      return new Swiper(container.find('.swiper')[0], options);
+      return window.createSwiper(container.find('.swiper')[0], options);
     }
   };
 

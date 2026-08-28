@@ -283,7 +283,7 @@
     // Room Swiper 초기화 (DOM 업데이트 후)
     setTimeout(function () {
       if (window.roomSwiper) window.roomSwiper.destroy();
-      window.roomSwiper = new Swiper('.room_slider', {
+      window.roomSwiper = createSwiper('.room_slider', {
         loop: true,
         effect: 'fade',
         speed: 2000,

@@ -212,7 +212,7 @@
     // 여기(DOMContentLoaded)선 아직 DOM에 주입 전이라 중복 처리하지 않음
   };
 
-  // MAPPER: 현재 roomtype interior[isSelected] → rv_slider 슬라이드 생성 (sortOrder 순)
+  // MAPPER: 현재 roomtype interior[isSelected] → rv_slider 슬라이드 생성 (sortOrder 순 0~2번째 3장)
   RoomMapper.prototype.mapRoomPreview = function () {
     var wrapper = document.querySelector('.rv_slider .swiper-wrapper');
     if (!wrapper) return;
@@ -222,7 +222,7 @@
 
     var images = this.getCategoryImages(rt, 'roomtype_interior').filter(function (img) {
       return img && img.url;
-    });
+    }).slice(0, 3);
 
     wrapper.innerHTML = '';
 
