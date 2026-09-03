@@ -77,7 +77,7 @@ class PopupManager {
     /**
      * 팝업 데이터 처리 → 박스 목록 생성 후 표시
      */
-    processPopups(popupData, forceShow) {
+    processPopups(popupData) {
         if (!Array.isArray(popupData)) {
             this.boxes = [];
             this.hide();
@@ -101,8 +101,9 @@ class PopupManager {
         activePopups.forEach(p => {
             this.getSelectedImages(p).forEach((url, idx) => {
                 const boxId = p.id + '_' + idx;
-                // '오늘 하루 보지 않기'는 일반/미리보기 모두 적용. 단 팝업 직접 편집(forceShow) 시엔 무시하고 노출.
-                if (!forceShow && this.isHiddenToday(boxId)) return;
+                // '오늘 하루 보지 않기'는 실사이트에서만 적용한다.
+                // 미리보기에서는 편집 중 팝업이 안 보이면 확인이 안 되므로 무시한다.
+                if (!this.isPreviewMode && this.isHiddenToday(boxId)) return;
                 this.boxes.push({
                     boxId: boxId,
                     popupId: p.id,
@@ -195,30 +196,52 @@ class PopupManager {
         }
 
         this.container.innerHTML = this.render();
-
-        // 약간의 딜레이 후 active 클래스 추가 (페이드 인)
-        requestAnimationFrame(() => {
-            const overlay = this.container.querySelector('.popup-overlay');
-            if (overlay) overlay.classList.add('active');
-        });
-
         this.bindEvents();
-        this.fitBoxes();
+
+        // 폭 계산이 끝난 뒤에 노출한다. 먼저 보여주면 이미지 원본 크기(최대 90vw)로
+        // 떴다가 fitBox 가 폭을 넣으면서 줄어들어 깜빡인다.
+        this.fitBoxes(() => {
+            requestAnimationFrame(() => {
+                const overlay = this.container.querySelector('.popup-overlay');
+                if (overlay) overlay.classList.add('active');
+            });
+        });
     }
 
     /**
      * 이미지 원본 비율(naturalWidth/Height)로 박스 폭을 계산해 적용
      * → 잘림 없음 + 좌우 빈 여백 없음 (세로로 긴 이미지는 화면 높이에 맞춰 축소)
      */
-    fitBoxes() {
+    fitBoxes(onReady) {
         const imgs = this.container.querySelectorAll('.popup-image');
-        imgs.forEach(img => {
+        let pending = 0;
+        let settled = false;
+        const finish = () => {
+            if (settled) return;
+            settled = true;
+            if (typeof onReady === 'function') onReady();
+        };
+
+        imgs.forEach((img) => {
             if (img.complete && img.naturalWidth) {
                 this.fitBox(img);
             } else {
-                img.addEventListener('load', () => this.fitBox(img), { once: true });
+                pending++;
+                const settle = () => {
+                    this.fitBox(img);
+                    if (--pending === 0) finish();
+                };
+                img.addEventListener('load', settle, { once: true });
+                img.addEventListener('error', settle, { once: true });
             }
         });
+
+        if (pending === 0) {
+            finish();
+        } else {
+            // 이미지가 느려도 팝업이 영영 안 보이면 안 되므로 상한을 둔다
+            setTimeout(finish, 1500);
+        }
 
         if (!this._resizeHandler) {
             this._resizeHandler = () => this.fitBoxes();
@@ -394,10 +417,10 @@ class PopupManager {
     /**
      * 미리보기 모드에서 팝업 데이터 업데이트
      */
-    updateFromPreview(popupData, forceShow) {
+    updateFromPreview(popupData) {
         this.isPreviewMode = true;
         const popups = popupData?.popups || popupData || [];
-        this.processPopups(Array.isArray(popups) ? popups : [], forceShow);
+        this.processPopups(Array.isArray(popups) ? popups : []);
     }
 
     /**
@@ -416,15 +439,27 @@ PopupManager.MAX_BOX_WIDTH = 700;
 // 전역 인스턴스 생성
 window.PopupManager = PopupManager;
 
-// DOM 로드 완료 시 초기화
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        window.popupManager = new PopupManager();
-        window.popupManager.init();
-    });
-} else {
+// 인스턴스 생성 + 초기화
+// 미리보기(iframe)에서는 preview-handler 가 popup.js 보다 먼저 로드돼
+// TEMPLATE_READY 를 보내므로, POPUP_UPDATE 가 이 파일이 받아지기 전에 도착할 수
+// 있다. 그때 preview-handler 가 보관해 둔 페이로드로 한 번 더 반영한다.
+function bootPopupManager() {
     window.popupManager = new PopupManager();
-    window.popupManager.init();
+    window.popupManager.init().then(() => {
+        const handler = window.previewHandler;
+        if (!handler) return;
+        if (handler.lastPopupData) {
+            window.popupManager.updateFromPreview(handler.lastPopupData);
+        } else if (handler.currentData) {
+            handler.refreshPopupFromTemplate(handler.currentData);
+        }
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootPopupManager);
+} else {
+    bootPopupManager();
 }
 
 } // PopupManager 중복 선언 방지 끝
