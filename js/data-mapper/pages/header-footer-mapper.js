@@ -49,7 +49,8 @@
           var m = self.getMatchedRoom(rt);
           return m && m.status === 'active';
         });
-        roomsLink.href = firstActive ? ('room.html?id=' + firstActive.id) : 'room.html';
+        var firstItem = this.getRoomMenuItems(firstActive ? [firstActive] : [], function (rt) { return (rt && rt.name) || ''; })[0];
+        roomsLink.href = firstItem ? this.getRoomMenuLink(firstItem, 'id') : 'room.html';
       }
     }
 
@@ -159,27 +160,28 @@
 
   // MAPPER: roomtypes[].name → ROOMS 메뉴 동적 생성 (미리보기 다음에)
   HeaderFooterMapper.prototype.mapRoomMenu = function () {
+    var self = this;
     var roomtypes = this.getRoomtypes();
-    // PC + 모바일 ROOMS 서브메뉴 둘 다 동적 생성 ("미리보기" 다음에 객실들 append)
+    var roomItems = this.getRoomMenuItems(roomtypes, function (rt) { return (rt && rt.name) || ''; });
     var containers = document.querySelectorAll('[data-rooms-submenu], [data-rooms-submenu-mobile]');
     if (!containers.length) return;
 
     containers.forEach(function (container) {
       clearMapped(container);
-      roomtypes.forEach(function (rt) {
-        if (!rt.name || !rt.name.trim()) return;
+      roomItems.forEach(function (item) {
+        var name = self.getRoomMenuLabel(item);
+        if (!String(name).trim()) return;
         var li = document.createElement('li');
         li.setAttribute('data-mapped', '');
         var a = document.createElement('a');
-        a.href = 'room.html?id=' + rt.id;
-        a.textContent = rt.name;
+        a.href = self.getRoomMenuLink(item, 'id');
+        a.textContent = name;
         li.appendChild(a);
         container.appendChild(li);
       });
     });
   };
 
-  // MAPPER: property.facilities[].name → SPECIAL 메뉴 동적 생성
   HeaderFooterMapper.prototype.mapFacilityMenu = function () {
     var facilities = this.getProperty().facilities || [];
     var container = document.querySelector('[data-facility-submenu]');
