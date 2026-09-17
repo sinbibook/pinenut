@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "version": "1.19.0",
-    "generatedAt": "2026-09-17T10:23:46.269976209Z",
+    "version": "1.20.0",
+    "generatedAt": "2026-09-17T10:44:45.084540429Z",
     "templateType": "trip_e",
     "propertyId": "90b0859e-2fa6-4223-84cb-5e5cbf9906e5",
     "homepageId": "2dc91053-7bbc-4042-80d3-6fa54e355f87"
@@ -1512,8 +1512,8 @@
                 "title": "ROOM PREVIEW",
                 "images": [
                   {
-                    "id": "3c50d6b4-7531-42b2-a9c4-51a7f7786039",
-                    "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/layout_map_about/1787552923743-f32y10oby5.jpg",
+                    "id": "01a0aef7-fd3d-77eb-9ead-abbb2e78eb52",
+                    "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/layout_map_about/1789641882712-5psl1l9x1t.jpg",
                     "sortOrder": 0,
                     "description": "",
                     "isSelected": true,
