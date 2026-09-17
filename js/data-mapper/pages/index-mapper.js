@@ -195,11 +195,10 @@
     var roomtypes = this.getRoomtypes();
     var self = this;
     var activeRoomtypes = roomtypes.filter(function (rt) {
-      if (!(rt && rt.name && rt.name.trim())) return false;
+      if (!self.getRoomtypeName(rt)) return false;
       var matched = self.getMatchedRoom(rt);
       return !(matched && matched.status === 'inactive');
     });
-    var roomItems = this.getRoomMenuItems(activeRoomtypes, function (rt) { return (rt && rt.name) || ''; });
 
     // Gallery title 매핑 (fallback: "stay with comfort")
     var titleComfortEl = document.querySelector('[data-gallery-title-comfort]');
@@ -246,9 +245,11 @@
 
     var roomSlideHrefs = [];
 
-    roomItems.forEach(function (item) {
-      var rt = self.getRoomMenuRoomtype(item);
-      var roomLabel = self.getRoomMenuLabel(item);
+    // Room Preview 카드는 groupName 과 무관하게 **항상 전체 객실**을 깐다.
+    // 그룹으로 접히는 곳은 헤더 ROOMS 메뉴와 객실 상세 탭뿐이고,
+    // 카드는 저마다 자기 객실 상세로 연결한다.
+    activeRoomtypes.forEach(function (rt) {
+      var roomLabel = self.getRoomtypeName(rt);
       if (!rt || !String(roomLabel).trim()) return;
       var matched = self.getMatchedRoom(rt);
 
@@ -258,7 +259,7 @@
       var slide = document.createElement('div');
       slide.className = 'swiper-slide room_list';
 
-      var roomHref = self.getRoomMenuLink(item);
+      var roomHref = self.getRoomMenuLink(rt);
       roomSlideHrefs.push(roomHref);
       slide.setAttribute('data-room-href', roomHref);
 
@@ -342,26 +343,9 @@
     wrapper.addEventListener('click', wrapper._roomImageClickHandler);
 
     // Room Swiper 재초기화 (DOM 업데이트 완료 후)
+    // 슬라이드가 1개면 setupRoomSlider 가 Swiper 없이 정적 카드로 노출한다.
     setTimeout(function() {
-      if (window.roomSwiper) {
-        window.roomSwiper.destroy();
-      }
-
-      window.roomSwiper = createSwiper('.room_slider', {
-      loop: true,
-      effect: 'fade',
-      speed: 2000,
-      spaceBetween: 0,
-      slideActiveClass: 'on',
-      autoplay: {
-        delay: 2500,
-        disableOnInteraction: false,
-      },
-      navigation: {
-        nextEl: '#roomList .arr.next',
-        prevEl: '#roomList .arr.prev',
-      },
-      });
+      if (window.setupRoomSlider) window.setupRoomSlider();
     }, 50);
   };
 

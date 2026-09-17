@@ -184,9 +184,9 @@
 #atc01 ul li.on .txt{opacity:1}
 #atc01 ul li a{overflow:hidden}
 #atc01 ul li a img{transition:all .4s;}
-#atc01 ul li img{width:550px;height:550px;transition:0.3s}
+#atc01 ul li img{width:550px;height:523px;object-fit:cover;transition:0.3s}
 #atc01 ul li.on a{border-radius:328px 328px 0 0}
-#atc01 ul li.on img{width:692px;height:620px;border-radius:328px 328px 0 0;transition:0.3s}
+#atc01 ul li.on img{width:692px;height:538px;object-fit:cover;border-radius:328px 328px 0 0;transition:0.3s}
 #atc01 .swiper-slide-prev{margin-top:0}
 #atc01 .swiper-slide-next{margin-top:200px}
 
@@ -198,17 +198,6 @@
 #atc01 .pager span:first-child:after{position:absolute;content:'';top:5px;right:0;width:1px;height:14px;transform:rotate(10deg);background:#786659}
 #atc01 .pager span:first-child::before{content:"(";display:inline-block;position:absolute;left:-20px;width:20px;height:20px}
 #atc01 .pager span:last-child::before{content:")";display:inline-block;position:absolute;right:-35px;width:20px;height:20px}
-
-/* 모바일 우측하단 예약 버튼 (PC ( Reservation ) 스타일 → 둥근 배경) */
-.ft_btn_reserve.on {position:fixed; bottom:20px; right:12px; z-index:9999;}
-.ft_btn_reserve.on > a{
-    display:inline-flex; align-items:center; justify-content:center;
-    padding:14px 22px; border-radius:50px;
-    background:var(--color-secondary); color:#fff;
-    font-family:var(--font-en-main); font-size:14px; letter-spacing:0.5px;
-    white-space:nowrap; box-shadow:0 4px 14px rgba(0,0,0,.25);
-}
-.ft_btn_reserve.on > a > span{padding:0 4px;}
 
 /* 반응형 [s] */
 @media (hover:hover){
@@ -1247,254 +1236,20 @@ map
 @media only screen and (max-width:350px) {
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* room_floorplan — 객실 평면도 (이미지 한 장만, 제목 없음)
+   ⚠️ 기본값이 `display:none` 이다 — 매퍼가 이미지를 찾았을 때만 풀어준다. */
+.room_floorplan {
+  padding: 90px 20px;
+  text-align: center;
+}
+.room_floorplan img {
+  display: inline-block;
+  max-width: 1440px;
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 1024px) {
+  .room_floorplan {
+    padding: 50px 20px;
+  }
+}
