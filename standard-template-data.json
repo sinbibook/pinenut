@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "version": "1.11.0",
-    "generatedAt": "2026-09-17T09:47:55.022780914Z",
+    "version": "1.12.0",
+    "generatedAt": "2026-09-17T09:48:10.890993445Z",
     "templateType": "trip_e",
     "propertyId": "90b0859e-2fa6-4223-84cb-5e5cbf9906e5",
     "homepageId": "2dc91053-7bbc-4042-80d3-6fa54e355f87"
@@ -29,6 +29,9 @@
     "domain": "pinenut.kr",
     "realtimeBookingId": "https://www.bookingplay.co.kr/booking/1/9431",
     "ybsId": "56809",
+    "tripPropertyId": "9431",
+    "partnerType": "distributor_b",
+    "tripProviderName": "",
     "amenities": [
       "흡연구역(지정장소)",
       "주차장"
@@ -409,9 +412,7 @@
         "surrounding": [ ],
         "commonArea": [ ]
       }
-    ],
-    "tripPropertyId": "9431",
-    "partnerType": "distributor_b"
+    ]
   },
   "rooms": [
     {
