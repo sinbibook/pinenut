@@ -253,6 +253,7 @@
         var a = document.createElement('a');
         a.href = self.getRoomMenuLink(item, 'id');
         a.textContent = name;
+        a.title = name; // 말줄임될 때 전체 객실명을 툴팁으로
         li.appendChild(a);
         container.appendChild(li);
       });
@@ -277,6 +278,7 @@
         var a = document.createElement('a');
         a.href = 'facility.html?id=' + f.id;
         a.textContent = f.name;
+        a.title = f.name;
         li.appendChild(a);
         target.appendChild(li);
       });
