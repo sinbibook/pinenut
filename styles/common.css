@@ -67,7 +67,7 @@ html[data-logo-ready] #shGnb.on .sh_logo .logo-m {opacity:1;}
 #shGnb .sh_nav ul .depth1 .depth1_a {line-height:6.25;display:block;padding:0 61px;transition:none;letter-spacing:0; text-transform:uppercase;}
 #shGnb .sh_nav ul .depth1 .depth1_a span{display: block;font-weight: 400;color: #fff;transition: all .2s;font-family: var(--font-en-main), var(--font-ko-sub);}
 #shGnb.on .sh_nav ul .depth1 .depth1_a span{color:var(--color-secondary);}
-#shGnb .sh_nav ul .depth1 .depth_box {display: block; position: absolute;left: 50%;transform: translateX(-50%);min-width: 100%; width: max-content;min-height: 145px;max-height:440px;overflow-y:auto;overflow-x:hidden;}
+#shGnb .sh_nav ul .depth1 .depth_box {display: block; position: absolute;left: 50%;transform: translateX(-50%);min-width: 100%; width: max-content;max-width:220px;min-height: 145px;max-height:440px;overflow-y:auto;overflow-x:hidden;}
 #shGnb .sh_nav ul .depth1 .depth_box.on {max-height:440px;opacity:1;}
 /* 동적 메뉴(rooms/special)가 많을 때 소메뉴 스크롤바 */
 #shGnb .sh_nav ul .depth1 .depth_box::-webkit-scrollbar {width:4px;}
@@ -76,6 +76,8 @@ html[data-logo-ready] #shGnb.on .sh_logo .logo-m {opacity:1;}
 #shGnb .sh_nav ul .depth1 .depth_box li {font-size:14px;line-height:1;padding:7px 0;color:var(--color-secondary);}
 #shGnb .sh_nav ul .depth1 .depth_box li + li {margin-top:5px;}
 #shGnb .sh_nav ul .depth1 .depth_box li a {display: none; line-height: 1.8;text-align: center;color: #999;transition: all .2s;}
+/* 객실명이 길어도 옆 대메뉴를 침범하지 않게 한 줄 말줄임 (전체 이름은 a 의 title 로) */
+#shGnb .sh_nav ul .depth1 .depth_box li a {max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 #shGnb .sh_nav ul .depth1 .depth_box li a:hover{color:red}
 #shGnb.on .sh_nav ul .depth1 .depth_box li a {color:#999;display:block}
 

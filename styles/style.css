@@ -703,7 +703,9 @@
 #expense1004 .vimg li:nth-child(4){animation-delay:0.75s;}
 
 @media(hover:hover){
-    #expense1004 .golink li a:hover{border:1px solid var(--color-secondary);color:#fff;background:var(--color-secondary)}
+    /* ⚠️ 이 버튼은 secondary 브라운 띠 위에 얹힌다 — 다른 페이지 golink 처럼
+       secondary 로 채우면 배경에 그대로 묻힌다. 반투명 흰색으로 채운다. */
+    #expense1004 .golink li a:hover{border:1px solid #fff;color:#fff;background:rgba(255,255,255,0.2);opacity:1}
     #expense1004 .rv_slider .arrow span:hover{opacity:1}
 }
 @media(max-width:1550px){
@@ -763,6 +765,10 @@
 
     #expense1004{font-size:14px}
     #expense1004 .tit{margin-bottom:20px}
+    /* 객실명이 길 때(예: "오늘(25년10월리모델링/노래방/…)") 화면 밖으로 삐져나가지 않게.
+       ⚠️ #expense1004 * 의 word-break:keep-all 때문에 슬래시로 이어진 한 덩어리가
+          통째로 안 꺾인다 — 이 제목에서만 필요할 때 꺾도록 풀어 준다. */
+    #expense1004 .tit h1{padding:0 20px;word-break:break-all;overflow-wrap:anywhere;line-height:1.35}
     #expense1004 .room_if .info{flex-direction:column}
     #expense1004 .room_if .l_cont{width:100%}
     #expense1004 .r_cont {top:10%;}
@@ -770,7 +776,7 @@
     #expense1004 .rv_slider{margin:80px 0 0}
     #expense1004 .rv_slider li{width:400px;height:350px}
     #expense1004 .rv_slider li.on {height:350px;}
-    #expense1004 .room_vw{padding:50px 0;background:var(--color-primary)}
+    #expense1004 .room_vw{padding:50px 0;background:var(--color-secondary)}
     #expense1004 .room_vw h2{padding:0 0 15px}
     #expense1004 .room_vw p{padding:0 10px}
     #expense1004 .room_vw:after{display:none}
@@ -810,6 +816,24 @@
     #expense1004 .rv_slider li.on {height:270px;}
     #expense1004 .r_cont {width:40%;top:23.5%;}
     #expense1004 .r_cont2 {top:24%;}
+}
+
+/* 예약하기(.r_cont) — 모바일에서는 절대배치를 풀고 슬라이더 아래로 내린다.
+   ⚠️ 데스크톱은 .room_vw:after 의 secondary 띠 위에 얹는 디자인이라 top:9% 로 띄우지만,
+      768px 이하에서는 그 띠가 사라지고(:after display:none) 이미지 높이가 폭마다 달라져
+      %-top 이 사진 한가운데로 떨어졌다. 글씨가 흰색 + opacity:.5 라 사진 위에서는
+      사실상 안 보인다. 폭별 top 값(23.2% / 25% / 23.5% …)을 계속 손보는 대신 흐름에 맡긴다.
+   ⚠️ 이 블록은 아래 breakpoint 들의 .r_cont 규칙보다 뒤에 와야 이긴다 — 위로 옮기지 말 것. */
+@media(max-width:768px){
+    /* 브라운 띠를 버튼까지 이어 붙인다 — room_vw 의 아래 여백을 r_cont 가 대신 낸다.
+       ⚠️ display:flow-root 필수 — padding-bottom 이 0 이면 .rv_slider 의 bottom margin
+          (480px 이하에서 margin:20px)이 room_vw 밖으로 새어 나가 브라운 띠가 끊기고
+          그 자리에 흰 줄이 생긴다(마진 상쇄). */
+    #expense1004 .room_vw{padding-bottom:0;display:flow-root}
+    /* margin-top:-1px — 같은 색 블록 두 개가 맞닿는 경계에서 소수점 높이 때문에
+       1px 이음매(밝은 선)가 보인다. 1px 겹쳐서 없앤다. */
+    #expense1004 .r_cont{position:static;width:auto;transform:none;margin-top:-1px;padding:31px 0 50px;text-align:center;background:var(--color-secondary)}
+    #expense1004 .golink{display:inline-block;width:200px;max-width:70%}
 }
 
 /* =========================== 객실 세부[e] */
