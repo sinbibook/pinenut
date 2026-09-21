@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "version": "1.27.0",
-    "generatedAt": "2026-09-21T01:14:06.088134854Z",
+    "version": "1.28.0",
+    "generatedAt": "2026-09-21T01:18:29.370075971Z",
     "templateType": "trip_e",
     "propertyId": "90b0859e-2fa6-4223-84cb-5e5cbf9906e5",
     "homepageId": "2dc91053-7bbc-4042-80d3-6fa54e355f87"
@@ -971,8 +971,8 @@
                 "title": "오롯이 따뜻한 기억으로 남을 수 있는 공간이 됩니다.",
                 "images": [
                   {
-                    "id": "01a0c186-28a9-71b4-a01d-9e37d299257c",
-                    "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/index_hero/1789953188316-dh1kct0fic.jpg",
+                    "id": "4e28a68a-a304-4320-8f79-6d9799023c83",
+                    "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/index_hero/1788399659053-3oe4sbot2n.jpg",
                     "sortOrder": 0,
                     "description": "",
                     "isSelected": true,
@@ -987,16 +987,16 @@
                     "blockId": null
                   },
                   {
-                    "id": "4e28a68a-a304-4320-8f79-6d9799023c83",
-                    "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/index_hero/1788399659053-3oe4sbot2n.jpg",
+                    "id": "83c27204-9a7c-4198-a356-521b1e1ad013",
+                    "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/index_hero/1788399659057-rarahtxc9a.jpg",
                     "sortOrder": 2,
                     "description": "",
                     "isSelected": true,
                     "blockId": null
                   },
                   {
-                    "id": "83c27204-9a7c-4198-a356-521b1e1ad013",
-                    "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/index_hero/1788399659057-rarahtxc9a.jpg",
+                    "id": "b25efcd4-7aa7-4bc6-a960-a5b5acf6ef9a",
+                    "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/index_hero/1788399659049-zolt5sxlss.jpg",
                     "sortOrder": 3,
                     "description": "",
                     "isSelected": true,
@@ -1059,17 +1059,9 @@
                     "blockId": null
                   },
                   {
-                    "id": "b25efcd4-7aa7-4bc6-a960-a5b5acf6ef9a",
-                    "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/index_hero/1788399659049-zolt5sxlss.jpg",
-                    "sortOrder": 11,
-                    "description": "",
-                    "isSelected": true,
-                    "blockId": null
-                  },
-                  {
                     "id": "fd527476-8ef2-417c-967d-56309deb2f75",
                     "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/index_hero/1788399659062-545hfokadj.jpg",
-                    "sortOrder": 12,
+                    "sortOrder": 11,
                     "description": "",
                     "isSelected": true,
                     "blockId": null
@@ -1077,7 +1069,7 @@
                   {
                     "id": "488a11cd-c726-400d-b3ad-bee8da0d6de4",
                     "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/index_hero/1788399659062-hkvkelh3vf.jpg",
-                    "sortOrder": 13,
+                    "sortOrder": 12,
                     "description": "",
                     "isSelected": true,
                     "blockId": null
