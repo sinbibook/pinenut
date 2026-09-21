@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "version": "1.28.0",
-    "generatedAt": "2026-09-21T01:18:29.370075971Z",
+    "version": "1.29.0",
+    "generatedAt": "2026-09-21T01:52:11.334980798Z",
     "templateType": "trip_e",
     "propertyId": "90b0859e-2fa6-4223-84cb-5e5cbf9906e5",
     "homepageId": "2dc91053-7bbc-4042-80d3-6fa54e355f87"
@@ -1951,8 +1951,8 @@
           "name": "우리(26년9월리모델링/노래방/벽난로/개별바베큐/계곡)",
           "images": [
             {
-              "id": "01a0aec2-d05a-7a50-b803-20a9efbc5e72",
-              "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/roomtype_thumbnail/1789638397514-scfo2x4gvy.jpg",
+              "id": "01a0c1a9-cae6-77ab-b684-b938da0c630c",
+              "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/roomtype_thumbnail/1789955524571-aj92k4m970.jpg",
               "sortOrder": 2,
               "description": "",
               "isSelected": true,
@@ -1960,8 +1960,8 @@
               "category": "roomtype_thumbnail"
             },
             {
-              "id": "01a0aec2-cf76-7ce5-b085-0018132bdbbb",
-              "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/roomtype_interior/1789638397513-a82icz12qa.jpg",
+              "id": "01a0c1a9-caad-74a6-a496-6e3ef19c8faf",
+              "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/2dc91053-7bbc-4042-80d3-6fa54e355f87/roomtype_interior/1789955524571-n384iyvf17.jpg",
               "sortOrder": 20,
               "description": "",
               "isSelected": true,
