@@ -189,13 +189,14 @@
       });
     }
 
-    // .room_if .txt: customFields hero title 우선 → 입력 안 했으면 room.description fallback (\n→<br>)
+    // .room_if .txt: customFields hero title 만 노출 (\n→<br>). room.description 은 폴백으로 쓰지 않는다.
     // 빈 값도 항상 반영 → 프리뷰에서 실시간으로 지워지고 바뀜
     var descEl = document.querySelector('.room_if .txt');
     if (descEl) {
       var heroTitle = this.getRoomHeroTitle(rt);
-      var txt = (heroTitle && heroTitle.trim()) ? heroTitle : ((room && room.description) || '');
+      var txt = (heroTitle && heroTitle.trim()) ? heroTitle : '';
       descEl.innerHTML = txt.replace(/\n/g, '<br>');
+      descEl.style.display = txt ? '' : 'none';
     }
 
     // golink 버튼 매핑 (property.realtimeBookingId 사용)

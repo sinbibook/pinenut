@@ -35,6 +35,7 @@
     this.mapBookingLinks();
     this.mapYbsButton();
     this.mapConsult();
+    this.mapSocialLinks();
     this.mapRoomMenu();
     this.mapFacilityMenu();
     this.mapFooterMenu();
@@ -47,10 +48,9 @@
   // MAPPER: layoutMap.enabled === false 이면 ROOMS 서브메뉴의 `미리보기` 숨김
   // (헤더 PC + 모바일 aside). 기존에는 mapFooterMenu 가 ROOMS 대메뉴의 href 만
   // 바꾸고 서브메뉴 항목은 그대로 둬서, 꺼진 페이지에 눌러 들어갈 수 있었다.
+  // 판정은 layout-map.html 의 404 기준과 같은 isLayoutMapEnabled() 를 쓴다.
   HeaderFooterMapper.prototype.mapLayoutMapMenu = function () {
-    var pages = this.getPages();
-    var lm = pages.layoutMap && pages.layoutMap.sections && pages.layoutMap.sections[0];
-    var hide = !!(lm && lm.enabled === false);
+    var hide = !this.isLayoutMapEnabled();
     document.querySelectorAll('[data-layout-map-menu]').forEach(function (el) {
       el.style.display = hide ? 'none' : '';
     });
@@ -69,25 +69,12 @@
 
   // MAPPER: footer 대메뉴 → 헤더 각 대메뉴의 첫 서브메뉴로 이동
   HeaderFooterMapper.prototype.mapFooterMenu = function () {
-    // ROOMS: layoutMap(미리보기)이 enabled면 layout-map.html, 아니면 첫 활성 객실
+    // ROOMS: layoutMap(미리보기) 켜짐 → layout-map.html / 꺼짐 → 헤더 ROOMS 서브메뉴 첫 객실 (getRoomsEntryLink)
+    // 판정은 layout-map.html 의 404 기준과 같은 isLayoutMapEnabled() — 꺼진 채 layout-map.html 로 두면 404.
+    // 객실이 하나도 없으면 room.html
     var roomsLink = document.querySelector('[data-footer-rooms-link]');
     if (roomsLink) {
-      var pages = this.getPages();
-      var layoutEnabled = pages.layoutMap && pages.layoutMap.sections &&
-        pages.layoutMap.sections[0] && pages.layoutMap.sections[0].enabled !== false;
-      if (layoutEnabled) {
-        roomsLink.href = 'layout-map.html';
-      } else {
-        var self = this;
-        var firstActive = this.getRoomtypes().filter(function (rt) {
-          return !!self.getRoomtypeName(rt);
-        }).find(function (rt) {
-          var m = self.getMatchedRoom(rt);
-          return m && m.status === 'active';
-        });
-        var firstItem = this.getRoomMenuItems(firstActive ? [firstActive] : [])[0];
-        roomsLink.href = firstItem ? this.getRoomMenuLink(firstItem, 'id') : 'room.html';
-      }
+      roomsLink.href = this.getRoomsEntryLink() || 'room.html';
     }
 
     // SPECIAL: 첫 facility
@@ -179,11 +166,57 @@
       var link = (button.tagName === 'A') ? button : button.querySelector('a');
       if (link) {
         link.href = 'javascript:void(0)';
-        link.addEventListener('click', function () {
+        // addEventListener 로 쌓지 않고 덮어쓴다. 미리보기는 샘플 데이터(ybsId "YBS ID")로 먼저 그린 뒤
+        // 실제 데이터로 다시 그리는데, 쌓이면 샘플 링크(ypIdx=YBS%20ID)까지 함께 열린다
+        link.onclick = function () {
           window.open(ybs_url + ybsId, '_blank');
-        });
+        };
       }
     });
+  };
+
+  // 소셜 링크 플랫폼 — [data-homepage-socialLinks-{platform}] 와 1:1.
+  // 헤더 네이버 버튼은 blog 칸을 쓴다(어드민에서 네이버 플레이스 주소를 blog 에 입력).
+  var SOCIAL_PLATFORMS = ['facebook', 'instagram', 'blog', 'youtube'];
+
+  // MAPPER: homepage.socialLinks.{platform} → [data-homepage-socialLinks-{platform}] (href, 없으면 숨김)
+  //
+  // 값이 있으면 href + 노출, 없으면(null·빈 문자열·공백·키 없음) 숨긴다.
+  // 마크업은 매핑 전 깜빡임이 없도록 `.hidden-social-link`(숨김) 상태로 시작한다.
+  // 버튼을 감싸는 [data-social-wrap] 은 안에 보이는 버튼이 없으면 래퍼째 숨긴다.
+  // E형 헤더 마크업은 blog·instagram 두 개(PC #shGnb · 모바일 #topmenuM) — facebook / youtube 는 매칭 요소 0개.
+  // 헤더에 버튼이 하나라도 보이면 루트에 data-social="on" 을 찍는다 — PC 대메뉴 여백을 줄이는 CSS 기준
+  // (:has 대신 — 일부 브라우저에서 스타일 미반영).
+  HeaderFooterMapper.prototype.mapSocialLinks = function () {
+    var socialLinks = this.getHomepage().socialLinks || {};
+    var headerOn = false;
+    SOCIAL_PLATFORMS.forEach(function (platform) {
+      var url = consultText(socialLinks[platform]);
+      document.querySelectorAll('[data-homepage-socialLinks-' + platform + ']').forEach(function (el) {
+        if (!url) {
+          el.classList.add('hidden-social-link');
+          el.setAttribute('href', '#!');
+          el.removeAttribute('target');
+          el.removeAttribute('rel');
+          return;
+        }
+        el.setAttribute('href', url);
+        el.setAttribute('target', '_blank');
+        el.setAttribute('rel', 'noopener');
+        el.classList.remove('hidden-social-link');
+        if (el.closest('#sh_hd')) headerOn = true;
+      });
+    });
+    document.querySelectorAll('[data-social-wrap]').forEach(function (wrap) {
+      var visible = wrap.querySelector(
+        '[data-homepage-socialLinks-facebook]:not(.hidden-social-link),' +
+        '[data-homepage-socialLinks-instagram]:not(.hidden-social-link),' +
+        '[data-homepage-socialLinks-blog]:not(.hidden-social-link),' +
+        '[data-homepage-socialLinks-youtube]:not(.hidden-social-link)'
+      );
+      wrap.classList.toggle('hidden-social-link', !visible);
+    });
+    document.documentElement.setAttribute('data-social', headerOn ? 'on' : 'off');
   };
 
   // 상담 URL 에 쓸 tripPropertyId. 없거나 형식이 아니면 빈 문자열.
@@ -338,8 +371,34 @@
     });
   };
 
+  // MAPPER: customFields.footer.ruralStayMark → [data-footer-rural-stay-mark] (우측 정보 칸 맨 위, 예약문의 위)
+  // 농어촌민박사업자 이미지가 있을 때만 이미지 줄을 노출한다. 없으면 숨겨 기존 푸터와 같다.
+  // #sh_ft 는 고정 높이라 노출할 때만 has-rural-stay-mark 로 높이를 풀어 준다.
+  // 프리뷰는 같은 페이지에서 다시 매핑하므로 매번 표시 상태를 되돌린다.
+  HeaderFooterMapper.prototype.mapRuralStayMark = function () {
+    var footer = this.getCustomFields().footer || {};
+    var mark = footer.ruralStayMark;
+    var markUrl = mark && mark.url ? String(mark.url) : '';
+
+    document.querySelectorAll('#sh_ft').forEach(function (footerEl) {
+      footerEl.classList.toggle('has-rural-stay-mark', !!markUrl);
+    });
+    document.querySelectorAll('[data-footer-rural-stay-mark-wrap]').forEach(function (wrap) {
+      wrap.style.display = markUrl ? '' : 'none';
+    });
+    document.querySelectorAll('[data-footer-rural-stay-mark]').forEach(function (img) {
+      if (!markUrl) {
+        img.removeAttribute('src');
+        return;
+      }
+      img.src = markUrl;
+      img.alt = (mark.description && String(mark.description).trim()) || '농어촌민박사업자';
+    });
+  };
+
   HeaderFooterMapper.prototype.mapFooter = function () {
     this.mapCopyright();
+    this.mapRuralStayMark();
     var prop = this.getProperty();
 
     // Footer 슬로건
