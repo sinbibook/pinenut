@@ -201,6 +201,11 @@
     var items = [];
     list.forEach(function (rt) {
       var groupName = self.getRoomGroupName(rt);
+      // 그룹 숙소에서는 미그룹 객실을 메뉴에 내지 않는다.
+      // 원본 헤더가 그룹만 노출하고, 미그룹 객실은 목록 / Room Preview 로만 도달한다.
+      // (Room Preview 는 roomtypes[] 전체를 그리므로 영향 없다)
+      if (!groupName) return;
+
       var label = groupName || (resolveName ? resolveName(rt) : self.getRoomtypeName(rt));
       if (!String(label).trim()) return;
       var key = groupName ? 'group:' + groupName : 'room:' + rt.id;
@@ -218,6 +223,32 @@
   BaseDataMapper.prototype.isRoomMenuItemActive = function (item, currentId) {
     if (!item || !currentId) return false;
     return (item.roomtypes || []).some(function (rt) { return String(rt && rt.id) === String(currentId); });
+  };
+
+  // ── 객실 미리보기(layout-map) 사용 여부 ──────────────────
+  // layout-map.html 이 404 로 보내는 기준과 같아야 한다.
+  // E 는 **명시적으로 enabled === false 일 때만** 꺼짐으로 본다
+  // (섹션이 없으면 = 데이터 미도착/부분 갱신 → 리다이렉트하지 않는다).
+  BaseDataMapper.prototype.isLayoutMapEnabled = function () {
+    var page = this.getPages().layoutMap;
+    var section = page && page.sections && page.sections[0];
+    return !(section && section.enabled === false);
+  };
+
+  // 대메뉴 ROOMS(푸터 data-footer-rooms-link)가 갈 곳.
+  //   미리보기 켜짐 → layout-map.html (객실 미리보기)
+  //   미리보기 꺼짐 → 첫 번째 객실 상세 (헤더 ROOMS 서브메뉴의 첫 객실 항목과 같은 곳 — 그룹 숙소면 첫 그룹의 첫 객실)
+  // 객실이 하나도 없으면 갈 곳이 없으므로 null — 호출부가 정한다.
+  BaseDataMapper.prototype.getRoomsEntryLink = function () {
+    if (this.isLayoutMapEnabled()) return 'layout-map.html';
+    var self = this;
+    var link = null;
+    this.getRoomMenuItems(this.getRoomtypes()).some(function (item) {
+      if (!String(self.getRoomMenuLabel(item)).trim()) return false;
+      link = self.getRoomMenuLink(item, 'id');
+      return true;
+    });
+    return link;
   };
 
   BaseDataMapper.prototype.toPhoneList = function (value) {

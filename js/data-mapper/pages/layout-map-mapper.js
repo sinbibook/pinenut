@@ -9,9 +9,8 @@
 
   LayoutMapMapper.prototype.mapPage = function () {
     // 명시적으로 enabled === false 일 때만 404 (데이터 미도착/부분 갱신 시엔 리다이렉트 안 함)
-    var pages = this.getPages();
-    var section = pages.layoutMap && pages.layoutMap.sections && pages.layoutMap.sections[0];
-    if (section && section.enabled === false) {
+    // 헤더 "미리보기" 숨김, 푸터 ROOMS 이동처(첫 객실 상세)도 같은 기준(isLayoutMapEnabled)으로 정한다.
+    if (!this.isLayoutMapEnabled()) {
       window.location.href = '404.html';
       return;
     }
